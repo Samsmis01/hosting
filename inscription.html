@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HexTech - Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #111111;
+            --accent: #8b5cf6;
+            --accent-hover: #a78bfa;
+            --text: #ffffff;
+            --card-bg: rgba(30, 30, 46, 0.7);
+            --border: rgba(139, 92, 246, 0.3);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gradient: linear-gradient(135deg, #8b5cf6, #3b82f6, #10b981);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 25%);
+        }
+        
+        .register-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+        }
+        
+        .register-header p {
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+        
+        .register-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .register-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .register-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .register-form input {
+            width: 100%;
+            padding: 14px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .register-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 25px 0;
+        }
+        
+        .terms input {
+            margin-top: 5px;
+            width: auto;
+        }
+        
+        .terms label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        
+        .terms a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border);
+            z-index: 1;
+        }
+        
+        .divider span {
+            background-color: var(--card-bg);
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+            opacity: 0.7;
+        }
+        
+        .social-register {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .social-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            opacity: 0.8;
+        }
+        
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-home a {
+            color: var(--text);
+            text-decoration: none;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .back-home a:hover {
+            opacity: 1;
+        }
+        
+        /* Notification Toast */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        
+        .notification-toast {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 10px;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+        
+        .toast-icon.success {
+            color: var(--success);
+        }
+        
+        .toast-icon.error {
+            color: var(--danger);
+        }
+        
+        .toast-icon.info {
+            color: var(--accent);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .toast-message {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toast-close:hover {
+            color: var(--text);
+        }
+        
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 15px;
+            }
+            
+            .register-card {
+                padding: 30px 20px;
+            }
+            
+            .social-register {
+                flex-direction: column;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                HexTech
+            </a>
+            <p>Créez votre compte gratuit</p>
+        </div>
+        
+        <div class="register-card">
+            <form id="registerForm" class="register-form">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" placeholder="Choisissez un nom d'utilisateur" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Adresse Email</label>
+                    <input type="email" id="email" placeholder="votre@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Créez un mot de passe sécurisé" required>
+                    <div class="password-strength">Minimum 6 caractères</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                </div>
+                
+                <div class="terms">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <label for="acceptTerms">
+                        J'accepte les <a href="#">conditions d'utilisation</a> et la 
+                        <a href="#">politique de confidentialité</a> de HexTech
+                    </label>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <i class="fas fa-user-plus"></i> Créer mon compte
+                </button>
+                
+                <div class="divider">
+                    <span>Ou inscrivez-vous avec</span>
+                </div>
+                
+                <div class="social-register">
+                    <button type="button" class="social-btn" id="googleRegister">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button type="button" class="social-btn" id="githubRegister">
+                        <i class="fab fa-github"></i> GitHub
+                    </button>
+                </div>
+                
+                <div class="login-link">
+                    Déjà un compte ? <a href="login.html">Se connecter</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="back-home">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour afficher les notifications
+        function showToast(title, message, type = 'info') {
+            const container = document.querySelector('.notification-container') || createNotificationContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = `notification-toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon ${type}">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                     type === 'error' ? 'exclamation-circle' : 
+                                     'info-circle'}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Bouton de fermeture
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Supprimer automatiquement après 5 secondes
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 5000);
+            
+            return toast;
+        }
+
+        function createNotificationContainer() {
+            const container = document.createElement('div');
+            container.className = 'notification-container';
+            document.body.appendChild(container);
+            return container;
+        }
+
+        // Validation d'email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Gestion de l'inscription
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validation
+            if (!username || !email || !password || !confirmPassword) {
+                showToast('Erreur', 'Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showToast('Erreur', 'Adresse email invalide', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('Erreur', 'Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Erreur', 'Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+            
+            if (!document.getElementById('acceptTerms').checked) {
+                showToast('Erreur', 'Vous devez accepter les conditions d\'utilisation', 'error');
+                return;
+            }
+            
+            // Simulation de chargement
+            const submitBtn = this.querySelector('.register-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
+            submitBtn.disabled = true;
+            
+            // Simulation d'une requête API
+            setTimeout(() => {
+                // Créer l'utilisateur
+                const userData = {
+                    id: Date.now(),
+                    username: username,
+                    email: email,
+                    points: 50, // Points de bienvenue
+                    isAdmin: false,
+                    createdAt: new Date().toISOString(),
+                    bots: []
+                };
+                
+                // Sauvegarder dans localStorage
+                localStorage.setItem('hextech_current_user', JSON.stringify(userData));
+                localStorage.setItem('hextech_username', username);
+                localStorage.setItem('hextech_points', '50');
+                localStorage.setItem('hextech_logged_in', 'true');
+                
+                // Ajouter aux utilisateurs existants
+                const existingUsers = JSON.parse(localStorage.getItem('hextech_users') || '[]');
+                existingUsers.push(userData);
+                localStorage.setItem('hextech_users', JSON.stringify(existingUsers));
+                
+                showToast('Inscription réussie !', `Bienvenue ${username} ! 50 points offerts.`, 'success');
+                
+                // Redirection vers le dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            }, 2000);
+        });
+
+        // Inscription Google
+        document.getElementById('googleRegister').addEventListener('click', function() {
+            showToast('Inscription Google', 'Inscription avec Google en cours...', 'info');
+            
+            // Simuler une inscription sociale
+            setTimeout(() => {
+                const userData = {
+                    username: `google_user_${Date.now().toString().slice(-6)}`,
+                    email: `google${Date.now().toString().slice(-6)}@example.com`,
+                    points: 50,
+                    isAdmin: false,
+                    socialLogin: true,
+                    provider: 'google',
+                    createdAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('hextech_current_user', JSON.stringify(userData));
+                localStorage.setItem('hextech_username', userData.username);
+                localStorage.setItem('hextech_points', '50');
+                localStorage.setItem('hextech_logged_in', 'true');
+                
+                showToast('Inscription réussie !', `Bienvenue ${userData.username} !`, 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            }, 1500);
+        });
+
+        // Inscription GitHub
+        document.getElementById('githubRegister').addEventListener('click', function() {
+            showToast('Inscription GitHub', 'Inscription avec GitHub en cours...', 'info');
+            
+            // Simuler une inscription sociale
+            setTimeout(() => {
+                const userData = {
+                    username: `github_user_${Date.now().toString().slice(-6)}`,
+                    email: `github${Date.now().toString().slice(-6)}@example.com`,
+                    points: 50,
+                    isAdmin: false,
+                    socialLogin: true,
+                    provider: 'github',
+                    createdAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('hextech_current_user', JSON.stringify(userData));
+                localStorage.setItem('hextech_username', userData.username);
+                localStorage.setItem('hextech_points', '50');
+                localStorage.setItem('hextech_logged_in', 'true');
+                
+                showToast('Inscription réussie !', `Bienvenue ${userData.username} !`, 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            }, 1500);
+        });
+
+        // Vérifier si l'utilisateur est déjà connecté
+        window.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('hextech_logged_in');
+            
+            if (isLoggedIn === 'true') {
+                // Rediriger automatiquement vers le dashboard
+                showToast('Déjà connecté', 'Redirection vers le dashboard...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
