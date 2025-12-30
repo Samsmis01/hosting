@@ -21,7 +21,7 @@ services:
     domains:
       - hextech-backend.onrender.com
 
-  # Service WebSocket (si séparé)
+  # Service WebSocket
   - type: web
     name: hextech-ws
     env: node
@@ -33,10 +33,11 @@ services:
       - key: PORT
         value: 10001
       - key: JWT_SECRET
-        fromService:
-          name: hextech-backend
-          type: web
-          property: env.JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hextech-db
+          property: connectionString
     autoDeploy: true
 
   # Service Frontend (HTML/JS/CSS)
@@ -69,19 +70,14 @@ databases:
 
   # Cache Redis (optionnel)
   - name: hextech-redis
+    databaseName: redis
     plan: free
     ipAllowList:
       - source: 0.0.0.0/0
         description: everywhere
 
 crons:
-  # Tâches planifiées
+  # Tâches planifiées (exemple)
   - name: cleanup-sessions
-    schedule: "0 2 * * *"  # Tous les jours à 2h du matin
+    schedule: "0 0 * * *"  # Tous les jours à minuit
     command: node scripts/cleanup.js
-    service: hextech-backend
-
-  - name: backup-database
-    schedule: "0 3 * * 0"  # Tous les dimanches à 3h
-    command: node scripts/backup.js
-    service: hextech-backend
