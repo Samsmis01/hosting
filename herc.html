@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HexTech - Mes Bots Configurés</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #111111;
+            --accent: #8b5cf6;
+            --accent-hover: #a78bfa;
+            --text: #ffffff;
+            --card-bg: rgba(30, 30, 46, 0.7);
+            --border: rgba(139, 92, 246, 0.3);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links .logout-btn {
+            background-color: transparent;
+            color: #ef4444;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: 1px solid #ef4444;
+        }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .container {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* ===== NOUVEAU : SECTION PAIRING WHATSAPP ===== */
+        .pairing-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid var(--accent);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pairing-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+        }
+        
+        .pairing-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .pairing-header i {
+            font-size: 2rem;
+            color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .pairing-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .pairing-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .pairing-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .pairing-input-group label {
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pairing-input {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .pairing-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        .pairing-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .pairing-info {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            margin-top: 10px;
+        }
+        
+        .pairing-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .pairing-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .pairing-btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        
+        .pairing-btn.primary {
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            color: white;
+        }
+        
+        .pairing-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        
+        .pairing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .pairing-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .pairing-status {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            display: none;
+        }
+        
+        .pairing-status.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .status-loading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status-loading i {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .pairing-code-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed var(--accent);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .pairing-code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        
+        .pairing-instructions {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .pairing-instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .pairing-instructions li {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .pairing-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .pairing-success.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .pairing-success i {
+            color: var(--success);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+        
+        .user-info-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .user-info-left h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .user-info-left p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+        
+        .user-stats {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .primary-btn {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .secondary-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .bots-section {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Filtres et recherche */
+        .filters-bar {
+            margin-bottom: 25px;
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .filter-select {
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            min-width: 180px;
+        }
+        
+        /* Table des bots */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .bots-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        
+        .bots-table thead {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+        
+        .bots-table th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .bots-table td {
+            padding: 16px 15px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .bots-table tbody tr {
+            transition: background-color 0.3s;
+        }
+        
+        .bots-table tbody tr:hover {
+            background-color: rgba(139, 92, 246, 0.05);
+        }
+        
+        /* Badges de status */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .status-online {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-offline {
+            background-color: rgba(107, 114, 128, 0.15);
+            color: #9ca3af;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .status-configured {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: var(--info);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-deploying {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Badges Online/fakerecord */
+        .bool-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .bool-true {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .bool-false {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Boutons d'action */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn.view {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .action-btn.edit {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .action-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn.restart {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .action-btn.stop {
+            background-color: #6b7280;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            border-top: 1px solid var(--border);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        .pagination-btn {
+            padding: 10px 20px;
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background-color: rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #pageInfo {
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        /* Aucun résultat */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #9ca3af;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            opacity: 0.5;
+        }
+        
+        /* Modal de détails */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid var(--border);
+        }
+        
+        .modal h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .bot-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .detail-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .detail-item h4 {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+        
+        .detail-item p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .config-code {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 5%;
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+            background-color: var(--secondary-bg);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .copyright i {
+            color: #ff4757;
+            margin: 0 5px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .notification.info {
+            background-color: var(--info);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background-color: rgba(10, 10, 10, 0.95);
+                width: 100%;
+                height: calc(100vh - 70px);
+                padding-top: 40px;
+                transition: right 0.3s ease;
+                border-top: 1px solid var(--border);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .pairing-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .pairing-actions {
+                flex-direction: column;
+            }
+            
+            .pairing-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .user-info-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .quick-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">HexTech</a>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="confi.html" class="active"><i class="fas fa-cogs"></i> Mes Bots</a>
+            <a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- ===== NOUVEAU : SECTION PAIRING WHATSAPP ===== -->
+        <div class="pairing-section">
+            <div class="pairing-header">
+                <i class="fab fa-whatsapp"></i>
+                <h2>Connecter WhatsApp</h2>
+            </div>
+            
+            <div class="pairing-form">
+                <div class="pairing-input-group">
+                    <label for="whatsappNumber">
+                        <i class="fas fa-phone"></i> Numéro WhatsApp
+                    </label>
+                    <input type="tel" 
+                           id="whatsappNumber" 
+                           class="pairing-input" 
+                           placeholder="Ex: +243810000000"
+                           required>
+                    <div class="pairing-info">
+                        <p><i class="fas fa-info-circle"></i> Format international requis avec l'indicatif pays (ex: +243 pour le Congo)</p>
+                    </div>
+                </div>
+                
+                <div class="pairing-input-group">
+                    <label for="botName">
+                        <i class="fas fa-robot"></i> Nom du Bot (Optionnel)
+                    </label>
+                    <input type="text" 
+                           id="pairingBotName" 
+                           class="pairing-input" 
+                           placeholder="Ex: MonBotWhatsApp">
+                </div>
+            </div>
+            
+            <div class="pairing-actions">
+                <button class="pairing-btn primary" id="generatePairingCodeBtn">
+                    <i class="fas fa-qrcode"></i> Générer le Code de Pairing
+                </button>
+                <button class="pairing-btn secondary" id="checkConnectionBtn">
+                    <i class="fas fa-sync-alt"></i> Vérifier la Connexion
+                </button>
+            </div>
+            
+            <!-- Section d'affichage du code -->
+            <div class="pairing-status" id="pairingStatus">
+                <div class="status-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <div>
+                        <h4>Génération du code en cours...</h4>
+                        <p>Veuillez patienter pendant que nous générons votre code de pairing</p>
+                    </div>
+                </div>
+                
+                <div class="pairing-code-display" id="pairingCodeDisplay" style="display: none;">
+                    <h4>Votre code de pairing WhatsApp</h4>
+                    <div class="pairing-code" id="pairingCode"></div>
+                    <p>Ce code expire dans 2 minutes</p>
+                </div>
+                
+                <div class="pairing-instructions" id="pairingInstructions" style="display: none;">
+                    <h4><i class="fas fa-mobile-alt"></i> Comment utiliser ce code :</h4>
+                    <ol>
+                        <li>Ouvrez WhatsApp sur votre téléphone</li>
+                        <li>Allez dans <strong>Paramètres → Périphériques liés</strong></li>
+                        <li>Cliquez sur <strong>"Ajouter un périphérique"</strong></li>
+                        <li>Saisissez le code ci-dessus</li>
+                        <li>Patientez jusqu'à la confirmation</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Section succès -->
+            <div class="pairing-success" id="pairingSuccess">
+                <div style="text-align: center;">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>WhatsApp connecté avec succès !</h4>
+                    <p>Votre session WhatsApp a été établie. Vous pouvez maintenant configurer votre bot.</p>
+                    <button class="pairing-btn primary" id="configureBotBtn">
+                        <i class="fas fa-cog"></i> Configurer le Bot
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>Mes Bots Configurés</h1>
+            <p>Gérez et surveillez tous vos bots en un seul endroit</p>
+        </div>
+        
+        <div class="user-info-card">
+            <div class="user-info-left">
+                <h3>Bonjour, <span id="userName">Utilisateur</span> !</h3>
+                <p>Voici un aperçu de vos bots configurés</p>
+            </div>
+            
+            <div class="user-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="userTotalBots">0</div>
+                    <div class="stat-label">Bots totaux</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userOnlineBots">0</div>
+                    <div class="stat-label">Bots en ligne</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="userPoints">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <button class="action-btn primary-btn" id="addBotBtn">
+                    <i class="fas fa-plus"></i> Nouveau Bot
+                </button>
+                <button class="action-btn secondary-btn" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Actualiser
+                </button>
+            </div>
+        </div>
+        
+        <div class="bots-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list"></i> Liste de mes Bots</h2>
+                <div>
+                    <span id="filteredCount">0</span> bots sur <span id="totalCount">0</span>
+                </div>
+            </div>
+            
+            <!-- Filtres et recherche -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <input type="text" id="searchBot" placeholder="Rechercher un bot..." class="search-input">
+                    <select id="filterStatus" class="filter-select">
+                        <option value="all">Tous les statuts</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                        <option value="configured">Configuré</option>
+                        <option value="deploying">En déploiement</option>
+                    </select>
+                    <select id="filterType" class="filter-select">
+                        <option value="all">Toutes les plateformes</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="telegram">Telegram</option>
+                        <option value="discord">Discord</option>
+                        <option value="multi">Multi-plateforme</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="bots-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Propriétaire</th>
+                            <th>Téléphone</th>
+                            <th>Status</th>
+                            <th>Online</th>
+                            <th>Créé le</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userBotsTable">
+                        <!-- Les bots seront chargés ici dynamiquement -->
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 30px;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
+                                <p>Chargement de vos bots...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i> Précédent
+                    </button>
+                    <span id="pageInfo">Page 1 sur 1</span>
+                    <button class="pagination-btn" id="nextPage" disabled>
+                        Suivant <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bots-section">
+            <h2><i class="fas fa-plus-circle"></i> Créer un nouveau bot</h2>
+            <p style="margin-bottom: 20px; opacity: 0.8;">Configurez un nouveau bot en quelques étapes simples</p>
+            
+            <div class="quick-actions" style="justify-content: center;">
+                <button class="action-btn primary-btn" id="createWhatsAppBtn">
+                    <i class="fab fa-whatsapp"></i> WhatsApp Bot
+                </button>
+                <button class="action-btn primary-btn" id="createTelegramBtn">
+                    <i class="fab fa-telegram"></i> Telegram Bot
+                </button>
+                <button class="action-btn primary-btn" id="createDiscordBtn">
+                    <i class="fab fa-discord"></i> Discord Bot
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="copyright">Fabriqué avec <i class="fas fa-heart"></i> par HexTech Team</p>
+        <p class="copyright">HexTech © 2025 – Gestion des Bots</p>
+    </footer>
+
+    <!-- Modal de détails du bot -->
+    <div class="modal" id="botDetailsModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-robot"></i> Détails du Bot</h3>
+            <div id="botDetailsContent">
+                <!-- Les détails seront chargés ici dynamiquement -->
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn edit" id="editBotBtn">
+                    <i class="fas fa-edit"></i> Modifier
+                </button>
+                <button class="action-btn" id="closeDetailsBtn">
+                    <i class="fas fa-times"></i> Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de création de bot -->
+    <div class="modal" id="createBotModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-plus"></i> Créer un nouveau bot</h3>
+            <div id="createBotForm">
+                <!-- Le formulaire sera chargé ici dynamiquement selon le type de bot -->
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn primary-btn" id="saveBotBtn">
+                    <i class="fas fa-save"></i> Créer le bot
+                </button>
+                <button class="action-btn secondary-btn" id="cancelCreateBtn">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Confirmer la suppression</h3>
+            <p id="deleteConfirmText">Êtes-vous sûr de vouloir supprimer ce bot ?</p>
+            <div class="modal-actions">
+                <button class="action-btn delete" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+                <button class="action-btn secondary-btn" id="cancelDeleteBtn">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration API
+        const API_BASE = 'http://localhost:3000/api';
+        
+        // Menu mobile
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // Données simulées (normalement récupérées depuis le backend)
+        let currentUser = JSON.parse(localStorage.getItem('hextech_current_user')) || {
+            id: 'user_123',
+            username: 'Utilisateur',
+            email: 'user@example.com',
+            points: 150,
+            isAdmin: false
+        };
+        
+        let userBots = JSON.parse(localStorage.getItem('hextech_user_bots')) || [
+            {
+                id: 1,
+                name: "Mon WhatsApp Bot",
+                type: "whatsapp",
+                owner: currentUser.username,
+                phone: "+243810000001",
+                status: "online",
+                online: true,
+                createdAt: new Date().toISOString(),
+                config: {
+                    botName: "Mon WhatsApp Bot",
+                    autoRestart: true,
+                    enableLogs: true,
+                    webhookUrl: ""
+                }
+            },
+            {
+                id: 2,
+                name: "Mon Telegram Bot",
+                type: "telegram",
+                owner: currentUser.username,
+                phone: "+243810000002",
+                status: "configured",
+                online: false,
+                createdAt: new Date(Date.now() - 86400000).toISOString(),
+                config: {
+                    botName: "Mon Telegram Bot",
+                    autoRestart: false,
+                    enableLogs: true,
+                    token: "123456:ABC-DEF1234"
+                }
+            },
+            {
+                id: 3,
+                name: "Mon Discord Bot",
+                type: "discord",
+                owner: currentUser.username,
+                phone: "+243810000003",
+                status: "offline",
+                online: false,
+                createdAt: new Date(Date.now() - 172800000).toISOString(),
+                config: {
+                    botName: "Mon Discord Bot",
+                    autoRestart: true,
+                    enableLogs: false,
+                    token: "MTAwMzIxOTM0"
+                }
+            }
+        ];
+
+        // Pagination
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredBots = [];
+
+        // ===== NOUVEAU : FONCTIONS POUR LE PAIRING WHATSAPP =====
+        
+        // Générer un code de pairing
+        document.getElementById('generatePairingCodeBtn').addEventListener('click', async function() {
+            const phoneNumber = document.getElementById('whatsappNumber').value.trim();
+            const botName = document.getElementById('pairingBotName').value.trim() || 'MonBotWhatsApp';
+            
+            if (!phoneNumber) {
+                showNotification('Veuillez entrer votre numéro WhatsApp', 'error');
+                return;
+            }
+            
+            // Valider le format du numéro
+            if (!phoneNumber.match(/^\+[1-9]\d{1,14}$/)) {
+                showNotification('Format de numéro invalide. Utilisez le format international (ex: +243810000000)', 'error');
+                return;
+            }
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération en cours...';
+            btn.disabled = true;
+            
+            try {
+                // Afficher le statut de chargement
+                document.getElementById('pairingStatus').classList.add('active');
+                document.getElementById('pairingCodeDisplay').style.display = 'none';
+                document.getElementById('pairingInstructions').style.display = 'none';
+                
+                // Récupérer le token d'authentification
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('Non authentifié. Veuillez vous reconnecter.');
+                }
+                
+                // Simuler un appel API (à remplacer par votre vrai appel backend)
+                // const response = await fetch(`${API_BASE}/pairing/generate`, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Authorization': `Bearer ${token}`,
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         phoneNumber: phoneNumber,
+                //         botName: botName
+                //     })
+                // });
+                
+                // Simuler un délai d'attente
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulation de réponse (à remplacer par la réponse réelle)
+                const mockResponse = {
+                    success: true,
+                    pairingCode: Math.floor(100000 + Math.random() * 900000).toString(),
+                    message: 'Code de pairing généré avec succès',
+                    phoneNumber: phoneNumber
+                };
+                
+                // Afficher le code
+                document.getElementById('pairingCode').textContent = mockResponse.pairingCode;
+                document.getElementById('pairingCodeDisplay').style.display = 'block';
+                document.getElementById('pairingInstructions').style.display = 'block';
+                
+                showNotification('Code de pairing généré avec succès !', 'success');
+                
+                // Démarrer la vérification périodique de la connexion
+                startConnectionCheck(phoneNumber);
+                
+            } catch (error) {
+                console.error('Erreur génération pairing code:', error);
+                showNotification(`Erreur: ${error.message}`, 'error');
+                document.getElementById('pairingStatus').classList.remove('active');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+        
+        // Vérifier la connexion WhatsApp
+        document.getElementById('checkConnectionBtn').addEventListener('click', async function() {
+            const phoneNumber = document.getElementById('whatsappNumber').value.trim();
+            
+            if (!phoneNumber) {
+                showNotification('Veuillez d\'abord entrer un numéro', 'error');
+                return;
+            }
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
+            btn.disabled = true;
+            
+            try {
+                // Récupérer le token d'authentification
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('Non authentifié');
+                }
+                
+                // Simuler la vérification (à remplacer par votre vrai appel backend)
+                // const response = await fetch(`${API_BASE}/pairing/status`, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Authorization': `Bearer ${token}`,
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         phoneNumber: phoneNumber
+                //     })
+                // });
+                
+                // Simuler un délai
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Simulation de réponse
+                const mockResponse = {
+                    connected: Math.random() > 0.5, // 50% de chance d'être connecté
+                    message: 'Vérification terminée'
+                };
+                
+                if (mockResponse.connected) {
+                    showNotification('WhatsApp est connecté !', 'success');
+                    document.getElementById('pairingSuccess').classList.add('active');
+                } else {
+                    showNotification('WhatsApp n\'est pas encore connecté', 'warning');
+                }
+                
+            } catch (error) {
+                console.error('Erreur vérification connexion:', error);
+                showNotification('Erreur lors de la vérification', 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+        
+        // Configurer le bot après connexion
+        document.getElementById('configureBotBtn').addEventListener('click', function() {
+            const phoneNumber = document.getElementById('whatsappNumber').value.trim();
+            const botName = document.getElementById('pairingBotName').value.trim() || 'MonBotWhatsApp';
+            
+            // Créer un nouveau bot WhatsApp dans la liste
+            const newBot = {
+                id: Date.now(),
+                name: botName,
+                type: "whatsapp",
+                owner: currentUser.username,
+                phone: phoneNumber,
+                status: "configured",
+                online: true,
+                createdAt: new Date().toISOString(),
+                config: {
+                    botName: botName,
+                    autoRestart: true,
+                    enableLogs: true,
+                    online: true,
+                    fakerecord: false,
+                    owner: currentUser.username
+                }
+            };
+            
+            userBots.push(newBot);
+            localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+            
+            // Mettre à jour l'interface
+            updateUserInfo();
+            updateUserBotsTable();
+            
+            showNotification(`Bot "${botName}" configuré avec succès !`, 'success');
+            document.getElementById('pairingSuccess').classList.remove('active');
+        });
+        
+        // Fonction pour vérifier périodiquement la connexion
+        function startConnectionCheck(phoneNumber) {
+            let checkCount = 0;
+            const maxChecks = 30; // 2 minutes (4 secondes * 30)
+            
+            const checkInterval = setInterval(async () => {
+                checkCount++;
+                
+                try {
+                    // Simuler la vérification de connexion
+                    const connected = Math.random() > 0.7; // 30% de chance d'être connecté
+                    
+                    if (connected || checkCount >= maxChecks) {
+                        clearInterval(checkInterval);
+                        
+                        if (connected) {
+                            showNotification('WhatsApp connecté avec succès !', 'success');
+                            document.getElementById('pairingSuccess').classList.add('active');
+                            document.getElementById('pairingStatus').classList.remove('active');
+                        } else {
+                            showNotification('Temps écoulé, veuillez réessayer', 'warning');
+                            document.getElementById('pairingStatus').classList.remove('active');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erreur vérification connexion:', error);
+                }
+            }, 4000); // Vérifier toutes les 4 secondes
+        }
+        
+        // ===== FONCTIONS EXISTANTES (inchangées) =====
+        
+        // Initialiser la page
+        function initUserBotsPage() {
+            updateUserInfo();
+            updateUserBotsTable();
+            setupFilters();
+            setupActions();
+        }
+        
+        // Mettre à jour les informations utilisateur
+        function updateUserInfo() {
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userPoints').textContent = currentUser.points;
+            
+            const totalBots = userBots.length;
+            const onlineBots = userBots.filter(bot => bot.online).length;
+            
+            document.getElementById('userTotalBots').textContent = totalBots;
+            document.getElementById('userOnlineBots').textContent = onlineBots;
+        }
+        
+        // Mettre à jour la table des bots
+        function updateUserBotsTable() {
+            const tableBody = document.getElementById('userBotsTable');
+            
+            // Appliquer les filtres
+            applyFilters();
+            
+            // Calculer les bots pour la page actuelle
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageBots = filteredBots.slice(startIndex, endIndex);
+            
+            // Mettre à jour les compteurs
+            document.getElementById('totalCount').textContent = userBots.length;
+            document.getElementById('filteredCount').textContent = filteredBots.length;
+            
+            if (pageBots.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="no-results">
+                            <i class="fas fa-robot"></i>
+                            <h3>Aucun bot trouvé</h3>
+                            <p>Vous n'avez pas encore configuré de bot ou aucun ne correspond aux filtres.</p>
+                            <button class="action-btn primary-btn" onclick="showCreateBotModal('whatsapp')" style="margin-top: 15px;">
+                                <i class="fas fa-plus"></i> Créer mon premier bot
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                updatePagination();
+                return;
+            }
+            
+            let tableHTML = '';
+            
+            pageBots.forEach(bot => {
+                // Déterminer la classe du badge de status
+                let statusClass = '';
+                switch(bot.status) {
+                    case 'online': statusClass = 'status-online'; break;
+                    case 'offline': statusClass = 'status-offline'; break;
+                    case 'configured': statusClass = 'status-configured'; break;
+                    case 'deploying': statusClass = 'status-deploying'; break;
+                    default: statusClass = 'status-offline';
+                }
+                
+                // Formater la date (comme dans l'image)
+                const createdDate = new Date(bot.createdAt);
+                const formattedDate = createdDate.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                const formattedTime = createdDate.toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                tableHTML += `
+                    <tr data-bot-id="${bot.id}">
+                        <td>#${bot.id}</td>
+                        <td><strong>${bot.name}</strong></td>
+                        <td>${bot.type.charAt(0).toUpperCase() + bot.type.slice(1)}</td>
+                        <td>${bot.owner}</td>
+                        <td>${bot.phone}</td>
+                        <td><span class="status-badge ${statusClass}">${bot.status}</span></td>
+                        <td><span class="bool-badge ${bot.online ? 'bool-true' : 'bool-false'}">${bot.online ? 'Oui' : 'Non'}</span></td>
+                        <td>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; opacity: 0.9;">${formattedTime}</div>
+                                <div style="font-size: 0.8rem; opacity: 0.7;">${formattedDate}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn view" onclick="viewBotDetails(${bot.id})">
+                                    <i class="fas fa-eye"></i> Voir
+                                </button>
+                                <button class="action-btn edit" onclick="editBot(${bot.id})">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                                ${bot.status === 'online' ? `
+                                    <button class="action-btn stop" onclick="stopBot(${bot.id})">
+                                        <i class="fas fa-stop"></i> Arrêter
+                                    </button>
+                                ` : `
+                                    <button class="action-btn restart" onclick="startBot(${bot.id})">
+                                        <i class="fas fa-play"></i> Démarrer
+                                    </button>
+                                `}
+                                <button class="action-btn delete" onclick="confirmDeleteBot(${bot.id})">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = tableHTML;
+            updatePagination();
+        }
+        
+        // Appliquer les filtres
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchBot').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+            const typeFilter = document.getElementById('filterType').value;
+            
+            filteredBots = userBots.filter(bot => {
+                // Filtre de recherche
+                const matchesSearch = !searchTerm || 
+                    bot.name.toLowerCase().includes(searchTerm) ||
+                    bot.type.toLowerCase().includes(searchTerm);
+                
+                // Filtre de status
+                const matchesStatus = statusFilter === 'all' || bot.status === statusFilter;
+                
+                // Filtre de type
+                const matchesType = typeFilter === 'all' || bot.type === typeFilter;
+                
+                return matchesSearch && matchesStatus && matchesType;
+            });
+            
+            // Réinitialiser à la première page après filtrage
+            currentPage = 1;
+        }
+        
+        // Configurer les filtres
+        function setupFilters() {
+            const searchInput = document.getElementById('searchBot');
+            const statusFilter = document.getElementById('filterStatus');
+            const typeFilter = document.getElementById('filterType');
+            
+            // Recherche en temps réel avec debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    updateUserBotsTable();
+                }, 300);
+            });
+            
+            // Filtres de status et type
+            statusFilter.addEventListener('change', updateUserBotsTable);
+            typeFilter.addEventListener('change', updateUserBotsTable);
+        }
+        
+        // Configurer les actions
+        function setupActions() {
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            const refreshBtn = document.getElementById('refreshBtn');
+            
+            // Pagination
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateUserBotsTable();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredBots.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateUserBotsTable();
+                }
+            });
+            
+            // Actualiser
+            refreshBtn.addEventListener('click', () => {
+                refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualisation...';
+                refreshBtn.disabled = true;
+                
+                setTimeout(() => {
+                    updateUserInfo();
+                    updateUserBotsTable();
+                    showNotification('Liste des bots actualisée', 'success');
+                    
+                    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualiser';
+                    refreshBtn.disabled = false;
+                }, 1000);
+            });
+            
+            // Boutons de création
+            document.getElementById('createWhatsAppBtn').addEventListener('click', () => {
+                showCreateBotModal('whatsapp');
+            });
+            
+            document.getElementById('createTelegramBtn').addEventListener('click', () => {
+                showCreateBotModal('telegram');
+            });
+            
+            document.getElementById('createDiscordBtn').addEventListener('click', () => {
+                showCreateBotModal('discord');
+            });
+            
+            document.getElementById('addBotBtn').addEventListener('click', () => {
+                showCreateBotModal('whatsapp');
+            });
+            
+            // Modal de création
+            document.getElementById('cancelCreateBtn').addEventListener('click', () => {
+                document.getElementById('createBotModal').style.display = 'none';
+            });
+            
+            // Modal de détails
+            document.getElementById('closeDetailsBtn').addEventListener('click', () => {
+                document.getElementById('botDetailsModal').style.display = 'none';
+            });
+            
+            document.getElementById('editBotBtn').addEventListener('click', function() {
+                const modal = document.getElementById('botDetailsModal');
+                const botId = modal.getAttribute('data-bot-id');
+                if (botId) {
+                    editBot(parseInt(botId));
+                }
+            });
+            
+            // Modal de suppression
+            document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                document.getElementById('confirmDeleteModal').style.display = 'none';
+            });
+            
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                if (window.botToDelete) {
+                    deleteBot(window.botToDelete);
+                    window.botToDelete = null;
+                }
+                document.getElementById('confirmDeleteModal').style.display = 'none';
+            });
+        }
+        
+        // Mettre à jour la pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredBots.length / itemsPerPage);
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            const pageInfo = document.getElementById('pageInfo');
+            
+            pageInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages;
+        }
+        
+        // Voir les détails d'un bot
+        window.viewBotDetails = function(botId) {
+            const bot = userBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            const modal = document.getElementById('botDetailsModal');
+            const content = document.getElementById('botDetailsContent');
+            
+            // Formater les données du bot
+            const createdDate = new Date(bot.createdAt);
+            const configJSON = JSON.stringify(bot.config, null, 2);
+            
+            content.innerHTML = `
+                <div class="bot-details-grid">
+                    <div class="detail-item">
+                        <h4>ID</h4>
+                        <p>#${bot.id}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Nom</h4>
+                        <p>${bot.name}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Type</h4>
+                        <p>${bot.type.toUpperCase()}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Propriétaire</h4>
+                        <p>${bot.owner}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Téléphone</h4>
+                        <p>${bot.phone}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Status</h4>
+                        <span class="status-badge ${bot.status === 'online' ? 'status-online' : 
+                                                   bot.status === 'offline' ? 'status-offline' : 
+                                                   bot.status === 'configured' ? 'status-configured' : 
+                                                   'status-deploying'}">
+                            ${bot.status}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Online</h4>
+                        <span class="bool-badge ${bot.online ? 'bool-true' : 'bool-false'}">
+                            ${bot.online ? 'Oui' : 'Non'}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Créé le</h4>
+                        <p>${createdDate.toLocaleString('fr-FR')}</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 20px;">Configuration</h4>
+                <pre class="config-code">${configJSON}</pre>
+            `;
+            
+            modal.setAttribute('data-bot-id', botId);
+            modal.style.display = 'flex';
+        };
+        
+        // Afficher le modal de création de bot
+        function showCreateBotModal(botType) {
+            const modal = document.getElementById('createBotModal');
+            const form = document.getElementById('createBotForm');
+            
+            let botTypeName = '';
+            switch(botType) {
+                case 'whatsapp': botTypeName = 'WhatsApp'; break;
+                case 'telegram': botTypeName = 'Telegram'; break;
+                case 'discord': botTypeName = 'Discord'; break;
+                default: botTypeName = 'Bot';
+            }
+            
+            form.innerHTML = `
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="newBotName">Nom du bot</label>
+                    <input type="text" id="newBotName" placeholder="Ex: Mon ${botTypeName} Bot" class="search-input">
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="newBotPhone">Numéro de téléphone</label>
+                    <input type="text" id="newBotPhone" placeholder="+243810000000" class="search-input">
+                </div>
+                
+                ${botType === 'telegram' ? `
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="botToken">Token Telegram</label>
+                        <input type="text" id="botToken" placeholder="123456:ABC-DEF1234" class="search-input">
+                    </div>
+                ` : botType === 'discord' ? `
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="botToken">Token Discord</label>
+                        <input type="text" id="botToken" placeholder="MTAwMzIxOTM0" class="search-input">
+                    </div>
+                ` : ''}
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>
+                        <input type="checkbox" id="autoRestart" checked>
+                        Redémarrage automatique
+                    </label>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>
+                        <input type="checkbox" id="enableLogs" checked>
+                        Activer les logs
+                    </label>
+                </div>
+                
+                <input type="hidden" id="botType" value="${botType}">
+            `;
+            
+            modal.style.display = 'flex';
+            
+            // Configurer le bouton de sauvegarde
+            const saveBtn = document.getElementById('saveBotBtn');
+            saveBtn.onclick = function() {
+                createNewBot(botType);
+            };
+        }
+        
+        // Créer un nouveau bot
+        function createNewBot(botType) {
+            const botName = document.getElementById('newBotName').value;
+            const botPhone = document.getElementById('newBotPhone').value;
+            const autoRestart = document.getElementById('autoRestart').checked;
+            const enableLogs = document.getElementById('enableLogs').checked;
+            
+            if (!botName || !botPhone) {
+                showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+            
+            const newBot = {
+                id: Date.now(),
+                name: botName,
+                type: botType,
+                owner: currentUser.username,
+                phone: botPhone,
+                status: 'configured',
+                online: false,
+                createdAt: new Date().toISOString(),
+                config: {
+                    botName: botName,
+                    autoRestart: autoRestart,
+                    enableLogs: enableLogs,
+                    online: false,
+                    fakerecord: false,
+                    owner: currentUser.username
+                }
+            };
+            
+            // Ajouter le token pour Telegram/Discord
+            if (botType === 'telegram' || botType === 'discord') {
+                const token = document.getElementById('botToken').value;
+                if (token) {
+                    newBot.config.token = token;
+                }
+            }
+            
+            userBots.push(newBot);
+            localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+            
+            document.getElementById('createBotModal').style.display = 'none';
+            updateUserInfo();
+            updateUserBotsTable();
+            
+            showNotification(`Bot "${botName}" créé avec succès`, 'success');
+        }
+        
+        // Modifier un bot
+        window.editBot = function(botId) {
+            const bot = userBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            // Remplir automatiquement le formulaire de pairing avec les infos du bot
+            if (bot.type === 'whatsapp') {
+                document.getElementById('whatsappNumber').value = bot.phone;
+                document.getElementById('pairingBotName').value = bot.name;
+                document.getElementById('pairingStatus').classList.add('active');
+                
+                showNotification(`Numéro ${bot.phone} pré-rempli. Cliquez sur "Générer le Code" pour reconnecter.`, 'info');
+                
+                // Faire défiler vers la section pairing
+                document.querySelector('.pairing-section').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const newName = prompt('Nouveau nom du bot:', bot.name);
+                if (newName && newName.trim() !== '') {
+                    const oldName = bot.name;
+                    bot.name = newName.trim();
+                    bot.config.botName = newName.trim();
+                    
+                    // Demander le status
+                    const newStatus = prompt('Nouveau statut (online/offline/configured/deploying):', bot.status);
+                    if (newStatus && ['online', 'offline', 'configured', 'deploying'].includes(newStatus)) {
+                        bot.status = newStatus;
+                        bot.online = newStatus === 'online';
+                    }
+                    
+                    // Demander le numéro de téléphone
+                    const newPhone = prompt('Nouveau numéro de téléphone:', bot.phone);
+                    if (newPhone && newPhone.trim() !== '') {
+                        bot.phone = newPhone.trim();
+                    }
+                    
+                    // Sauvegarder les modifications
+                    localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+                    updateUserBotsTable();
+                    
+                    showNotification(`Bot "${oldName}" modifié en "${newName}"`, 'success');
+                }
+            }
+        };
+        
+        // Démarrer un bot
+        window.startBot = function(botId) {
+            const bot = userBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            bot.status = 'online';
+            bot.online = true;
+            bot.config.online = true;
+            
+            localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+            updateUserBotsTable();
+            
+            showNotification(`Bot "${bot.name}" démarré`, 'success');
+        };
+        
+        // Arrêter un bot
+        window.stopBot = function(botId) {
+            const bot = userBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            bot.status = 'offline';
+            bot.online = false;
+            bot.config.online = false;
+            
+            localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+            updateUserBotsTable();
+            
+            showNotification(`Bot "${bot.name}" arrêté`, 'success');
+        };
+        
+        // Confirmer la suppression d'un bot
+        window.confirmDeleteBot = function(botId) {
+            const bot = userBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            window.botToDelete = botId;
+            const modal = document.getElementById('confirmDeleteModal');
+            const text = document.getElementById('deleteConfirmText');
+            
+            text.textContent = `Êtes-vous sûr de vouloir supprimer le bot "${bot.name}" ? Cette action est irréversible.`;
+            modal.style.display = 'flex';
+        };
+        
+        // Supprimer un bot
+        function deleteBot(botId) {
+            const botIndex = userBots.findIndex(b => b.id === botId);
+            if (botIndex === -1) return;
+            
+            const botName = userBots[botIndex].name;
+            userBots.splice(botIndex, 1);
+            
+            // Sauvegarder les modifications
+            localStorage.setItem('hextech_user_bots', JSON.stringify(userBots));
+            updateUserInfo();
+            updateUserBotsTable();
+            
+            showNotification(`Bot "${botName}" supprimé avec succès`, 'success');
+        }
+        
+        // Afficher une notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                 type === 'error' ? 'exclamation-triangle' : 
+                                 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Fermer les modals en cliquant en dehors
+        window.addEventListener('click', function(event) {
+            const detailsModal = document.getElementById('botDetailsModal');
+            const createModal = document.getElementById('createBotModal');
+            const deleteModal = document.getElementById('confirmDeleteModal');
+            
+            if (event.target === detailsModal) {
+                detailsModal.style.display = 'none';
+            }
+            if (event.target === createModal) {
+                createModal.style.display = 'none';
+            }
+            if (event.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                window.botToDelete = null;
+            }
+        });
+        
+        // Initialiser la page au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            initUserBotsPage();
+            
+            // Vérifier si l'utilisateur vient de déployer un bot
+            const urlParams = new URLSearchParams(window.location.search);
+            const botPhone = urlParams.get('phone');
+            const botName = urlParams.get('name');
+            
+            if (botPhone) {
+                document.getElementById('whatsappNumber').value = botPhone;
+                if (botName) {
+                    document.getElementById('pairingBotName').value = botName;
+                }
+                showNotification('Numéro pré-rempli depuis le déploiement', 'info');
+            }
+        });
+    </script>
+</body>
+</html>
