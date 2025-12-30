@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HexTech - Administration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #111111;
+            --accent: #8b5cf6;
+            --accent-hover: #a78bfa;
+            --text: #ffffff;
+            --card-bg: rgba(30, 30, 46, 0.7);
+            --border: rgba(139, 92, 246, 0.3);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links .logout-btn {
+            background-color: transparent;
+            color: #ef4444;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: 1px solid #ef4444;
+        }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .admin-container {
+            padding: 40px 5%;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent), #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .admin-header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .admin-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .admin-section {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+        
+        .admin-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .admin-btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #34d399;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #f87171;
+        }
+        
+        .users-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .user-info h4 {
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+        
+        .user-info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .user-action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .user-banned {
+            opacity: 0.5;
+            border-color: var(--danger);
+        }
+        
+        .user-banned h4 {
+            color: var(--danger);
+        }
+        
+        .admin-panel {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            margin-top: 30px;
+        }
+        
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .panel-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .panel-item h4 {
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        /* Section Bots Configurés */
+        .config-section {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            margin: 40px 0;
+        }
+        
+        .config-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Barre de filtres */
+        .filters-bar {
+            margin-bottom: 25px;
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .filter-select {
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            min-width: 180px;
+        }
+        
+        /* Table des bots */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .bots-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        
+        .bots-table thead {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+        
+        .bots-table th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .bots-table td {
+            padding: 16px 15px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .bots-table tbody tr {
+            transition: background-color 0.3s;
+        }
+        
+        .bots-table tbody tr:hover {
+            background-color: rgba(139, 92, 246, 0.05);
+        }
+        
+        /* Badges de status */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .status-online {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-offline {
+            background-color: rgba(107, 114, 128, 0.15);
+            color: #9ca3af;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .status-configured {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-deploying {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Badges Online/fakerecord */
+        .bool-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .bool-true {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .bool-false {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Boutons d'action */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn.view {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .action-btn.edit {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .action-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn.restart {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .action-btn.stop {
+            background-color: #6b7280;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            border-top: 1px solid var(--border);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        .pagination-btn {
+            padding: 10px 20px;
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background-color: rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #pageInfo {
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        /* Modal de détails amélioré */
+        .bot-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .detail-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .detail-item h4 {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+        
+        .detail-item p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .config-code {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        /* Aucun résultat */
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #9ca3af;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            opacity: 0.5;
+        }
+        
+        /* Accès refusé */
+        .access-denied {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .access-denied i {
+            font-size: 5rem;
+            color: var(--danger);
+            margin-bottom: 20px;
+        }
+        
+        .access-denied h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--danger);
+        }
+        
+        .access-denied p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 5%;
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+            background-color: var(--secondary-bg);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .copyright i {
+            color: #ff4757;
+            margin: 0 5px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border);
+        }
+        
+        .modal h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background-color: rgba(10, 10, 10, 0.95);
+                width: 100%;
+                height: calc(100vh - 70px);
+                padding-top: 40px;
+                transition: right 0.3s ease;
+                border-top: 1px solid var(--border);
+            }
+            
+            .nav-links.active {
+                right: 0;
+                 }
+            
+            .admin-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="admin.html" class="logo">HexTech Admin</a>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="admin.html"><i class="fas fa-crown"></i> Administration</a>
+            <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="confi.html"><i class="fas fa-cogs"></i> Mes Bots</a>
+            <a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Vérification de l'admin -->
+        <div id="adminContent">
+            <!-- Le contenu sera chargé ici après vérification -->
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
+                <p>Vérification des permissions...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="copyright">Fabriqué avec <i class="fas fa-heart"></i> par HexTech Team</p>
+        <p class="copyright">HexTech © 2025 – Panel d'administration</p>
+    </footer>
+
+    <!-- Modal pour ajouter un bot -->
+    <div class="modal" id="addBotModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-plus"></i> Ajouter un nouveau bot</h3>
+            <div class="form-group">
+                <label for="botName">Nom du bot</label>
+                <input type="text" id="botName" placeholder="Ex: MessengerBot">
+            </div>
+            
+            <div class="form-group">
+                <label for="botPlatform">Plateforme</label>
+                <select id="botPlatform">
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Telegram">Telegram</option>
+                    <option value="Discord">Discord</option>
+                    <option value="Multi-plateforme">Multi-plateforme</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="botDescription">Description</label>
+                <input type="text" id="botDescription" placeholder="Description du bot">
+            </div>
+            
+            <div class="form-group">
+                <label for="botCost">Coût en points</label>
+                <input type="number" id="botCost" min="1" max="50" value="5">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="admin-btn btn-success" id="saveBotBtn">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+                <button class="admin-btn btn-danger" id="cancelBotBtn">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de détails du bot -->
+    <div class="modal" id="botDetailsModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-robot"></i> Détails du Bot</h3>
+            <div id="botDetailsContent">
+                <!-- Les détails seront chargés ici dynamiquement -->
+            </div>
+            <div class="modal-actions">
+                <button class="admin-btn" id="closeDetailsBtn">
+                    <i class="fas fa-times"></i> Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal" id="confirmDeleteModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Confirmer la suppression</h3>
+            <p id="deleteConfirmText">Êtes-vous sûr de vouloir supprimer ce bot ?</p>
+            <div class="modal-actions">
+                <button class="admin-btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+                <button class="admin-btn btn-secondary" id="cancelDeleteBtn">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu mobile
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // Vérifier si l'utilisateur est administrateur
+        function checkAdminAccess() {
+            const currentUser = JSON.parse(localStorage.getItem('hextech_current_user')) || {
+                id: 'user_123',
+                username: 'Utilisateur',
+                email: 'user@example.com',
+                points: 150,
+                isAdmin: false
+            };
+            
+            // Si l'utilisateur n'est pas admin, afficher un message d'erreur
+            if (!currentUser.isAdmin) {
+                document.getElementById('adminContent').innerHTML = `
+                    <div class="access-denied">
+                        <i class="fas fa-ban"></i>
+                        <h2>Accès Refusé</h2>
+                        <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+                        <p>Seuls les administrateurs peuvent accéder au panel d'administration.</p>
+                        <div style="margin-top: 30px;">
+                            <a href="confi.html" class="admin-btn" style="text-decoration: none; display: inline-block;">
+                                <i class="fas fa-cogs"></i> Accéder à mes bots
+                            </a>
+                            <a href="dashboard.html" class="admin-btn btn-success" style="text-decoration: none; display: inline-block; margin-left: 15px;">
+                                <i class="fas fa-tachometer-alt"></i> Retour au dashboard
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return false;
+            }
+            
+            // Si l'utilisateur est admin, charger le contenu admin
+            loadAdminContent();
+            return true;
+        }
+        
+        // Charger le contenu admin
+        function loadAdminContent() {
+            const adminContent = document.getElementById('adminContent');
+            
+            adminContent.innerHTML = `
+                <div class="admin-header">
+                    <h1>Panel d'Administration HexTech</h1>
+                    <p>Gérez les utilisateurs, les points et surveillez l'activité du système</p>
+                </div>
+                
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3><i class="fas fa-users"></i> Utilisateurs Totaux</h3>
+                        <div class="value" id="totalUsers">0</div>
+                        <p>Nombre d'utilisateurs inscrits</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3><i class="fas fa-robot"></i> Bots Déployés</h3>
+                        <div class="value" id="totalBots">0</div>
+                        <p>Total des bots déployés</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3><i class="fas fa-coins"></i> Points Distribués</h3>
+                        <div class="value" id="totalPoints">0</div>
+                        <p>Points distribués aux utilisateurs</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3><i class="fas fa-ban"></i> Utilisateurs Bannis</h3>
+                        <div class="value" id="bannedUsers">0</div>
+                        <p>Comptes désactivés</p>
+                    </div>
+                </div>
+                
+                <div class="admin-sections">
+                    <div class="admin-section">
+                        <h2><i class="fas fa-gift"></i> Attribuer des Points</h2>
+                        <div class="form-group">
+                            <label for="userSelect">Sélectionner un utilisateur</label>
+                            <select id="userSelect">
+                                <option value="">Choisir un utilisateur</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pointsAmount">Nombre de points à attribuer</label>
+                            <input type="number" id="pointsAmount" min="1" max="1000" value="10">
+                        </div>
+                        
+                        <button class="admin-btn" id="givePointsBtn">
+                            <i class="fas fa-plus-circle"></i> Attribuer les points
+                        </button>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="allUsersPoints">Attribuer à tous les utilisateurs</label>
+                            <input type="number" id="allUsersPoints" min="1" max="100" value="5" placeholder="Points pour tous">
+                        </div>
+                        
+                        <button class="admin-btn btn-success" id="giveAllPointsBtn">
+                            <i class="fas fa-users"></i> Donner à tous
+                        </button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h2><i class="fas fa-user-cog"></i> Gestion des Utilisateurs</h2>
+                        <div class="form-group">
+                            <label for="searchUser">Rechercher un utilisateur</label>
+                            <input type="text" id="searchUser" placeholder="Nom d'utilisateur ou email">
+                        </div>
+                        
+                        <div class="users-list" id="usersList">
+                            <!-- Les utilisateurs seront affichés ici -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section Bots Configurés -->
+                <section class="config-section">
+                    <h2><i class="fas fa-cogs"></i> Bots Configurés (Administrateur)</h2>
+                    
+                    <!-- Filtres et recherche -->
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <input type="text" id="searchBot" placeholder="Rechercher un bot..." class="search-input">
+                            <select id="filterStatus" class="filter-select">
+                                <option value="all">Tous les statuts</option>
+                                <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                                <option value="configured">Configuré</option>
+                                <option value="deploying">En déploiement</option>
+                            </select>
+                            <select id="filterType" class="filter-select">
+                                <option value="all">Toutes les plateformes</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="telegram">Telegram</option>
+                                <option value="discord">Discord</option>
+                                <option value="multi">Multi-plateforme</option>
+                            </select>
+                            <button class="admin-btn" id="refreshBotsBtn">
+                                <i class="fas fa-sync-alt"></i> Actualiser
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="bots-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Type</th>
+                                    <th>Propriétaire</th>
+                                    <th>Téléphone</th>
+                                    <th>Status</th>
+                                    <th>Online</th>
+                                    <th>fakerecord</th>
+                                    <th>Créé le</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="configuredBotsTable">
+                                <!-- Les bots seront chargés ici dynamiquement -->
+                                <tr>
+                                    <td colspan="10" style="text-align: center; padding: 30px;">
+                                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
+                                        <p>Chargement des bots configurés...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Pagination -->
+                        <div class="pagination">
+                            <button class="pagination-btn" id="prevPage" disabled>
+                                <i class="fas fa-chevron-left"></i> Précédent
+                            </button>
+                            <span id="pageInfo">Page 1 sur 1</span>
+                            <button class="pagination-btn" id="nextPage" disabled>
+                                Suivant <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="admin-panel">
+                    <h2><i class="fas fa-chart-line"></i> Statistiques Détaillées</h2>
+                    <div class="panel-grid">
+                        <div class="panel-item">
+                            <h4><i class="fas fa-calendar"></i> Activité Récente</h4>
+                            <p id="recentActivity">Aucune activité récente</p>
+                        </div>
+                        
+                        <div class="panel-item">
+                            <h4><i class="fas fa-server"></i> Serveur</h4>
+                            <p>Status: <span style="color: var(--success);">Online</span></p>
+                            <p>Utilisateurs connectés: <span id="connectedUsers">0</span></p>
+                        </div>
+                        
+                        <div class="panel-item">
+                            <h4><i class="fas fa-shield-alt"></i> Sécurité</h4>
+                            <p>Dernière vérification: Aujourd'hui</p>
+                            <p>Tentatives de connexion: <span id="loginAttempts">0</span></p>
+                        </div>
+                        
+                        <div class="panel-item">
+                            <h4><i class="fas fa-database"></i> Base de données</h4>
+                            <p>Utilisateurs: <span id="dbUsers">0</span></p>
+                            <p>Bots: <span id="dbBots">0</span></p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <button class="admin-btn btn-danger" id="refreshDataBtn">
+                            <i class="fas fa-sync-alt"></i> Actualiser les données
+                        </button>
+                        
+                        <button class="admin-btn" id="exportDataBtn" style="margin-left: 15px;">
+                            <i class="fas fa-download"></i> Exporter les données
+                        </button>
+                        
+                        <button class="admin-btn btn-success" id="addBotBtn" style="margin-left: 15px;">
+                            <i class="fas fa-plus"></i> Ajouter un nouveau bot
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Initialiser le panel admin
+            initAdminPanel();
+        }
+        
+        // ==================== DONNÉES ADMIN ====================
+        
+        let adminUsers = JSON.parse(localStorage.getItem('hextech_admin_users')) || [
+            { id: 1, username: 'admin', email: 'admin@hextech.com', points: 9999, isAdmin: true, bots: [], isBanned: false },
+            { id: 2, username: 'samuel', email: 'samuel@hextech.com', points: 150, isAdmin: true, bots: ['HexBot Pro', 'AutoSaver'], isBanned: false },
+            { id: 3, username: 'john_doe', email: 'john@example.com', points: 45, isAdmin: false, bots: ['ChatGuard'], isBanned: false },
+            { id: 4, username: 'jane_smith', email: 'jane@example.com', points: 78, isAdmin: false, bots: ['SocialSync', 'NotifyMaster'], isBanned: false },
+            { id: 5, username: 'bot_master', email: 'bot@example.com', points: 12, isAdmin: false, bots: ['ShopBot'], isBanned: true }
+        ];
+        
+        let adminStats = JSON.parse(localStorage.getItem('hextech_admin_stats')) || {
+            totalUsers: 5,
+            totalBots: 6,
+            totalPoints: 285,
+            bannedUsers: 1,
+            connectedUsers: 3,
+            loginAttempts: 12
+        };
+        
+        // ==================== SECTION BOTS CONFIGURÉS (ADMIN) ====================
+        
+        let configuredBots = JSON.parse(localStorage.getItem('hextech_configured_bots')) || [
+            {
+                id: 1,
+                name: "HexBot Pro",
+                type: "whatsapp",
+                owner: "243983205687",
+                phone: "+243810000001",
+                status: "online",
+                online: true,
+                fakerecord: false,
+                createdAt: new Date().toISOString(),
+                config: {
+                    botName: "HexBot Pro",
+                    autoRestart: true,
+                    enableLogs: true,
+                    enableWebhook: true
+                }
+            },
+            {
+                id: 2,
+                name: "AutoSaver",
+                type: "telegram",
+                owner: "243983205687",
+                phone: "+243810000002",
+                status: "configured",
+                online: true,
+                fakerecord: false,
+                createdAt: new Date(Date.now() - 86400000).toISOString(),
+                config: {
+                    botName: "AutoSaver",
+                           autoRestart: false,
+                    enableLogs: true,
+                    enableWebhook: false
+                }
+            },
+            {
+                id: 3,
+                name: "ChatGuard",
+                type: "discord",
+                owner: "user_123",
+                phone: "+243810000003",
+                status: "offline",
+                online: false,
+                fakerecord: true,
+                createdAt: new Date(Date.now() - 172800000).toISOString(),
+                config: {
+                    botName: "ChatGuard Mod",
+                    autoRestart: true,
+                    enableLogs: false,
+                    enableWebhook: true
+                }
+            },
+            {
+                id: 4,
+                name: "SocialSync",
+                type: "multi",
+                owner: "user_456",
+                phone: "+243810000004",
+                status: "deploying",
+                online: false,
+                fakerecord: false,
+                createdAt: new Date(Date.now() - 3600000).toISOString(),
+                config: {
+                    botName: "SocialSync Master",
+                    autoRestart: true,
+                    enableLogs: true,
+                    enableWebhook: true
+                }
+            }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredBots = [];
+
+        // Initialiser le panel admin
+        function initAdminPanel() {
+            updateStats();
+            loadUsers();
+            populateUserSelect();
+            initConfiguredBotsSection();
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = adminStats.totalUsers;
+            document.getElementById('totalBots').textContent = adminStats.totalBots;
+            document.getElementById('totalPoints').textContent = adminStats.totalPoints;
+            document.getElementById('bannedUsers').textContent = adminStats.bannedUsers;
+            document.getElementById('connectedUsers').textContent = adminStats.connectedUsers;
+            document.getElementById('loginAttempts').textContent = adminStats.loginAttempts;
+            document.getElementById('dbUsers').textContent = adminStats.totalUsers;
+            document.getElementById('dbBots').textContent = adminStats.totalBots;
+            
+            const now = new Date();
+            const recentActivity = `Dernière mise à jour: ${now.toLocaleTimeString()}`;
+            document.getElementById('recentActivity').textContent = recentActivity;
+        }
+        
+        // Charger la liste des utilisateurs
+        function loadUsers() {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+            
+            adminUsers.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = `user-item ${user.isBanned ? 'user-banned' : ''}`;
+                
+                userItem.innerHTML = `
+                    <div class="user-info">
+                        <h4>${user.username} ${user.isAdmin ? '<i class="fas fa-crown" style="color: #f59e0b;"></i>' : ''}</h4>
+                        <p>${user.email} • ${user.points} points • ${user.bots.length} bots</p>
+                    </div>
+                    <div class="user-actions">
+                        <button class="user-action-btn" style="background-color: ${user.isBanned ? '#10b981' : '#ef4444'}; color: white;" onclick="toggleBan(${user.id})">
+                            <i class="fas fa-${user.isBanned ? 'check' : 'ban'}"></i> ${user.isBanned ? 'Débannir' : 'Bannir'}
+                        </button>
+                        <button class="user-action-btn" style="background-color: #8b5cf6; color: white;" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i> Modifier
+                        </button>
+                    </div>
+                `;
+                
+                usersList.appendChild(userItem);
+            });
+        }
+        
+        // Remplir la liste déroulante des utilisateurs
+        function populateUserSelect() {
+            const userSelect = document.getElementById('userSelect');
+            userSelect.innerHTML = '<option value="">Choisir un utilisateur</option>';
+            
+            adminUsers.filter(user => !user.isBanned).forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.username} (${user.points} points)`;
+                userSelect.appendChild(option);
+            });
+        }
+        
+        // Attribuer des points à un utilisateur
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'givePointsBtn') {
+                const userId = parseInt(document.getElementById('userSelect').value);
+                const points = parseInt(document.getElementById('pointsAmount').value);
+                
+                if (!userId || points < 1) {
+                    showNotification('Veuillez sélectionner un utilisateur et entrer un nombre valide de points', 'error');
+                    return;
+                }
+                
+                const user = adminUsers.find(u => u.id === userId);
+                if (user) {
+                    user.points += points;
+                    adminStats.totalPoints += points;
+                    
+                    localStorage.setItem('hextech_admin_users', JSON.stringify(adminUsers));
+                    localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                    
+                    updateStats();
+                    loadUsers();
+                    populateUserSelect();
+                    
+                    showNotification(`${points} points attribués à ${user.username}`, 'success');
+                }
+            }
+            
+            if (e.target && e.target.id === 'giveAllPointsBtn') {
+                const points = parseInt(document.getElementById('allUsersPoints').value);
+                
+                if (points < 1) {
+                    showNotification('Veuillez entrer un nombre valide de points', 'error');
+                    return;
+                }
+                
+                let totalGiven = 0;
+                adminUsers.forEach(user => {
+                    if (!user.isBanned) {
+                        user.points += points;
+                        totalGiven += points;
+                    }
+                });
+                
+                adminStats.totalPoints += totalGiven;
+                
+                localStorage.setItem('hextech_admin_users', JSON.stringify(adminUsers));
+                localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                
+                updateStats();
+                loadUsers();
+                populateUserSelect();
+                
+                showNotification(`${points} points attribués à tous les utilisateurs non bannis`, 'success');
+            }
+        });
+        
+        // Rechercher un utilisateur
+        document.addEventListener('input', function(e) {
+            if (e.target && e.target.id === 'searchUser') {
+                const searchTerm = e.target.value.toLowerCase();
+                const usersList = document.getElementById('usersList');
+                usersList.innerHTML = '';
+                
+                const filteredUsers = adminUsers.filter(user => 
+                    user.username.toLowerCase().includes(searchTerm) || 
+                    user.email.toLowerCase().includes(searchTerm)
+                );
+                
+                if (filteredUsers.length === 0) {
+                    usersList.innerHTML = '<p style="text-align: center; opacity: 0.7;">Aucun utilisateur trouvé</p>';
+                    return;
+                }
+                
+                filteredUsers.forEach(user => {
+                    const userItem = document.createElement('div');
+                    userItem.className = `user-item ${user.isBanned ? 'user-banned' : ''}`;
+                    
+                    userItem.innerHTML = `
+                        <div class="user-info">
+                            <h4>${user.username} ${user.isAdmin ? '<i class="fas fa-crown" style="color: #f59e0b;"></i>' : ''}</h4>
+                            <p>${user.email} • ${user.points} points • ${user.bots.length} bots</p>
+                        </div>
+                        <div class="user-actions">
+                            <button class="user-action-btn" style="background-color: ${user.isBanned ? '#10b981' : '#ef4444'}; color: white;" onclick="toggleBan(${user.id})">
+                                <i class="fas fa-${user.isBanned ? 'check' : 'ban'}"></i> ${user.isBanned ? 'Débannir' : 'Bannir'}
+                            </button>
+                            <button class="user-action-btn" style="background-color: #8b5cf6; color: white;" onclick="editUser(${user.id})">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    `;
+                    
+                    usersList.appendChild(userItem);
+                });
+            }
+        });
+        
+        // Bannir/débannir un utilisateur
+        window.toggleBan = function(userId) {
+            const user = adminUsers.find(u => u.id === userId);
+            if (user) {
+                user.isBanned = !user.isBanned;
+                adminStats.bannedUsers = adminUsers.filter(u => u.isBanned).length;
+                
+                localStorage.setItem('hextech_admin_users', JSON.stringify(adminUsers));
+                localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                
+                updateStats();
+                loadUsers();
+                populateUserSelect();
+                
+                showNotification(`${user.username} ${user.isBanned ? 'banni' : 'débanni'}`, 'success');
+            }
+        };
+        
+        // Modifier un utilisateur
+        window.editUser = function(userId) {
+            const user = adminUsers.find(u => u.id === userId);
+            if (user) {
+                const newPoints = prompt(`Modifier les points de ${user.username}:`, user.points);
+                if (newPoints !== null && !isNaN(newPoints)) {
+                    const pointsDiff = parseInt(newPoints) - user.points;
+                    user.points = parseInt(newPoints);
+                    adminStats.totalPoints += pointsDiff;
+                    
+                    localStorage.setItem('hextech_admin_users', JSON.stringify(adminUsers));
+                    localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                    
+                    updateStats();
+                    loadUsers();
+                    populateUserSelect();
+                    
+                    showNotification(`Points de ${user.username} mis à jour`, 'success');
+                }
+            }
+        };
+        
+        // Actualiser les données
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'refreshDataBtn') {
+                adminStats.connectedUsers = Math.floor(Math.random() * 10) + 1;
+                adminStats.loginAttempts += Math.floor(Math.random() * 5);
+                
+                localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                
+                updateStats();
+                showNotification('Données actualisées', 'success');
+            }
+            
+            if (e.target && e.target.id === 'exportDataBtn') {
+                const dataStr = JSON.stringify({
+                    users: adminUsers,
+                    stats: adminStats,
+                    exportedAt: new Date().toISOString()
+                }, null, 2);
+                
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `hextech_data_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                showNotification('Données exportées avec succès', 'success');
+            }
+            
+            if (e.target && e.target.id === 'addBotBtn') {
+                document.getElementById('addBotModal').style.display = 'flex';
+            }
+            
+            if (e.target && e.target.id === 'cancelBotBtn') {
+                document.getElementById('addBotModal').style.display = 'none';
+            }
+            
+            if (e.target && e.target.id === 'saveBotBtn') {
+                const botName = document.getElementById('botName').value;
+                const botPlatform = document.getElementById('botPlatform').value;
+                const botDescription = document.getElementById('botDescription').value;
+                const botCost = parseInt(document.getElementById('botCost').value);
+                
+                if (!botName || !botDescription || !botCost) {
+                    showNotification('Veuillez remplir tous les champs', 'error');
+                    return;
+                }
+                
+                const newBot = {
+                    name: botName,
+                    platform: botPlatform,
+                    description: botDescription,
+                    cost: botCost,
+                    addedAt: new Date().toISOString()
+                };
+                
+                adminStats.totalBots += 1;
+                localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+                
+                document.getElementById('addBotModal').style.display = 'none';
+                showNotification(`Bot "${botName}" ajouté avec succès`, 'success');
+                
+                document.getElementById('botName').value = '';
+                document.getElementById('botDescription').value = '';
+                document.getElementById('botCost').value = '5';
+                
+                updateStats();
+            }
+        });
+        
+        // ==================== SECTION BOTS CONFIGURÉS (ADMIN) ====================
+        
+        // Initialiser la section des bots configurés
+        function initConfiguredBotsSection() {
+            updateConfiguredBotsTable();
+            setupBotFilters();
+            setupBotActions();
+        }
+
+        // Mettre à jour la table des bots
+        function updateConfiguredBotsTable() {
+            const tableBody = document.getElementById('configuredBotsTable');
+            
+            // Appliquer les filtres
+            applyBotFilters();
+            
+            // Calculer les bots pour la page actuelle
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageBots = filteredBots.slice(startIndex, endIndex);
+            
+            if (pageBots.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="no-results">
+                            <i class="fas fa-robot"></i>
+                            <h3>Aucun bot configuré</h3>
+                            <p>Aucun bot n'a été configuré ou ne correspond aux filtres.</p>
+                        </td>
+                    </tr>
+                `;
+                updatePagination();
+                return;
+            }
+            
+            let tableHTML = '';
+            
+            pageBots.forEach(bot => {
+                // Déterminer la classe du badge de status
+                let statusClass = '';
+                switch(bot.status) {
+                    case 'online': statusClass = 'status-online'; break;
+                    case 'offline': statusClass = 'status-offline'; break;
+                    case 'configured': statusClass = 'status-configured'; break;
+                    case 'deploying': statusClass = 'status-deploying'; break;
+                    default: statusClass = 'status-offline';
+                }
+                
+                // Formater la date
+                const createdDate = new Date(bot.createdAt);
+                const formattedDate = createdDate.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                tableHTML += `
+                    <tr data-bot-id="${bot.id}">
+                        <td>#${bot.id}</td>
+                        <td><strong>${bot.name}</strong></td>
+                        <td>${bot.type.charAt(0).toUpperCase() + bot.type.slice(1)}</td>
+                        <td>${bot.owner}</td>
+                        <td>${bot.phone}</td>
+                        <td><span class="status-badge ${statusClass}">${bot.status}</span></td>
+                        <td><span class="bool-badge ${bot.online ? 'bool-true' : 'bool-false'}">${bot.online ? 'Oui' : 'Non'}</span></td>
+                        <td><span class="bool-badge ${bot.fakerecord ? 'bool-true' : 'bool-false'}">${bot.fakerecord ? 'Oui' : 'Non'}</span></td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn view" onclick="viewBotDetails(${bot.id})">
+                                    <i class="fas fa-eye"></i> Voir
+                                </button>
+                                <button class="action-btn edit" onclick="editBotAdmin(${bot.id})">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                                ${bot.status === 'online' ? `
+                                    <button class="action-btn stop" onclick="stopBotAdmin(${bot.id})">
+                                        <i class="fas fa-stop"></i> Arrêter
+                                    </button>
+                                ` : `
+                                    <button class="action-btn restart" onclick="startBotAdmin(${bot.id})">
+                                        <i class="fas fa-play"></i> Démarrer
+                                    </button>
+                                `}
+                                <button class="action-btn delete" onclick="confirmDeleteBotAdmin(${bot.id})">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = tableHTML;
+            updatePagination();
+        }
+
+        // Appliquer les filtres
+        function applyBotFilters() {
+            const searchTerm = document.getElementById('searchBot').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+            const typeFilter = document.getElementById('filterType').value;
+            
+            filteredBots = configuredBots.filter(bot => {
+                // Filtre de recherche
+                const matchesSearch = !searchTerm || 
+                    bot.name.toLowerCase().includes(searchTerm) ||
+                    bot.owner.toLowerCase().includes(searchTerm) ||
+                    bot.phone.toLowerCase().includes(searchTerm) ||
+                    bot.type.toLowerCase().includes(searchTerm);
+                
+                // Filtre de status
+                const matchesStatus = statusFilter === 'all' || bot.status === statusFilter;
+                
+                // Filtre de type
+                const matchesType = typeFilter === 'all' || bot.type === typeFilter;
+                
+                return matchesSearch && matchesStatus && matchesType;
+            });
+            
+            // Réinitialiser à la première page après filtrage
+            currentPage = 1;
+        }
+
+        // Configurer les filtres
+        function setupBotFilters() {
+            const searchInput = document.getElementById('searchBot');
+            const statusFilter = document.getElementById('filterStatus');
+            const typeFilter = document.getElementById('filterType');
+            const refreshBtn = document.getElementById('refreshBotsBtn');
+            
+            // Recherche en temps réel avec debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    updateConfiguredBotsTable();
+                }, 300);
+            });
+            
+            // Filtres de status et type
+            statusFilter.addEventListener('change', updateConfiguredBotsTable);
+            typeFilter.addEventListener('change', updateConfiguredBotsTable);
+            
+            // Bouton d'actualisation
+            refreshBtn.addEventListener('click', () => {
+                const btn = refreshBtn;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualisation...';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    updateConfiguredBotsTable();
+                    showNotification('Liste des bots actualisée', 'success');
+                    
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }, 1000);
+            });
+        }
+
+        // Configurer les actions de pagination
+        function setupBotActions() {
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateConfiguredBotsTable();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredBots.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateConfiguredBotsTable();
+                }
+            });
+        }
+
+        // Mettre à jour la pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredBots.length / itemsPerPage);
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            const pageInfo = document.getElementById('pageInfo');
+            
+            pageInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages;
+        }
+
+        // Voir les détails d'un bot (admin)
+        window.viewBotDetails = function(botId) {
+            const bot = configuredBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            const modal = document.getElementById('botDetailsModal');
+            const content = document.getElementById('botDetailsContent');
+            
+            // Formater les données du bot
+            const createdDate = new Date(bot.createdAt);
+            const configJSON = JSON.stringify(bot.config, null, 2);
+            
+            content.innerHTML = `
+                <div class="bot-details-grid">
+                    <div class="detail-item">
+                        <h4>ID</h4>
+                        <p>#${bot.id}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Nom</h4>
+                        <p>${bot.name}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Type</h4>
+                        <p>${bot.type.toUpperCase()}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Propriétaire</h4>
+                        <p>${bot.owner}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Téléphone</h4>
+                        <p>${bot.phone}</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Status</h4>
+                        <span class="status-badge ${bot.status === 'online' ? 'status-online' : 
+                                                   bot.status === 'offline' ? 'status-offline' : 
+                                                   bot.status === 'configured' ? 'status-configured' : 
+                                                   'status-deploying'}">
+                            ${bot.status}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Online</h4>
+                        <span class="bool-badge ${bot.online ? 'bool-true' : 'bool-false'}">
+                            ${bot.online ? 'Oui' : 'Non'}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <h4>fakerecord</h4>
+                        <span class="bool-badge ${bot.fakerecord ? 'bool-true' : 'bool-false'}">
+                            ${bot.fakerecord ? 'Oui' : 'Non'}
+                        </span>
+                    </div>
+                    <div class="detail-item" style="grid-column: span 2;">
+                        <h4>Créé le</h4>
+                        <p>${createdDate.toLocaleString('fr-FR')}</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 20px;">Configuration JSON</h4>
+                <pre class="config-code">${configJSON}</pre>
+                
+                <div class="detail-item" style="margin-top: 20px;">
+                    <h4>Actions disponibles (Administrateur)</h4>
+                    <div class="action-buttons" style="margin-top: 10px;">
+                        <button class="action-btn edit" onclick="editBotAdmin(${bot.id})">
+                            <i class="fas fa-edit"></i> Modifier
+                        </button>
+                        ${bot.status === 'online' ? `
+                            <button class="action-btn stop" onclick="stopBotAdmin(${bot.id})">
+                                <i class="fas fa-stop"></i> Arrêter
+                            </button>
+                        ` : `
+                            <button class="action-btn restart" onclick="startBotAdmin(${bot.id})">
+                                <i class="fas fa-play"></i> Démarrer
+                            </button>
+                        `}
+                        <button class="action-btn delete" onclick="confirmDeleteBotAdmin(${bot.id})">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        };
+
+        // Modifier un bot (admin)
+        window.editBotAdmin = function(botId) {
+            const bot = configuredBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            const newName = prompt('Nouveau nom du bot (Admin):', bot.name);
+            if (newName && newName.trim() !== '') {
+                bot.name = newName.trim();
+                
+                const newStatus = prompt('Nouveau statut (online/offline/configured/deploying):', bot.status);
+                if (newStatus && ['online', 'offline', 'configured', 'deploying'].includes(newStatus)) {
+                    bot.status = newStatus;
+                    bot.online = newStatus === 'online';
+                }
+                
+                const newFakerecord = confirm('fakerecord activé ?\nOK = Oui, Annuler = Non');
+                bot.fakerecord = newFakerecord;
+                
+                // Demander le propriétaire (admin peut changer)
+                const newOwner = prompt('Nouveau propriétaire:', bot.owner);
+                if (newOwner && newOwner.trim() !== '') {
+                    bot.owner = newOwner.trim();
+                }
+                
+                localStorage.setItem('hextech_configured_bots', JSON.stringify(configuredBots));
+                updateConfiguredBotsTable();
+                
+                showNotification(`Bot "${newName}" modifié par l'administrateur`, 'success');
+            }
+        };
+
+        // Démarrer un bot (admin)
+        window.startBotAdmin = function(botId) {
+            const bot = configuredBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            bot.status = 'online';
+            bot.online = true;
+            
+            localStorage.setItem('hextech_configured_bots', JSON.stringify(configuredBots));
+            updateConfiguredBotsTable();
+            
+            showNotification(`Bot "${bot.name}" démarré par l'administrateur`, 'success');
+        };
+
+        // Arrêter un bot (admin)
+        window.stopBotAdmin = function(botId) {
+            const bot = configuredBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            bot.status = 'offline';
+            bot.online = false;
+            
+            localStorage.setItem('hextech_configured_bots', JSON.stringify(configuredBots));
+            updateConfiguredBotsTable();
+            
+            showNotification(`Bot "${bot.name}" arrêté par l'administrateur`, 'success');
+        };
+
+        // Confirmer la suppression d'un bot (admin)
+        let botToDelete = null;
+        window.confirmDeleteBotAdmin = function(botId) {
+            const bot = configuredBots.find(b => b.id === botId);
+            if (!bot) return;
+            
+            botToDelete = botId;
+            const modal = document.getElementById('confirmDeleteModal');
+            const text = document.getElementById('deleteConfirmText');
+            
+            text.textContent = `Êtes-vous sûr de vouloir supprimer le bot "${bot.name}" ?\n\nPropriétaire: ${bot.owner}\nCette action est irréversible.`;
+            modal.style.display = 'flex';
+        };
+
+        // Gérer la suppression confirmée (admin)
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (botToDelete) {
+                deleteBotAdmin(botToDelete);
+                botToDelete = null;
+            }
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Annuler la suppression
+        document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+            botToDelete = null;
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Supprimer un bot (admin)
+        function deleteBotAdmin(botId) {
+            const botIndex = configuredBots.findIndex(b => b.id === botId);
+            if (botIndex === -1) return;
+            
+            const botName = configuredBots[botIndex].name;
+            configuredBots.splice(botIndex, 1);
+            
+            // Mettre à jour les stats
+            adminStats.totalBots = Math.max(0, (adminStats.totalBots || 0) - 1);
+            localStorage.setItem('hextech_admin_stats', JSON.stringify(adminStats));
+            
+            // Sauvegarder les modifications
+            localStorage.setItem('hextech_configured_bots', JSON.stringify(configuredBots));
+            updateConfiguredBotsTable();
+            updateStats();
+            
+            showNotification(`Bot "${botName}" supprimé par l'administrateur`, 'success');
+        }
+
+        // Fermer le modal de détails
+        document.getElementById('closeDetailsBtn').addEventListener('click', function() {
+            document.getElementById('botDetailsModal').style.display = 'none';
+        });
+
+        // Synchroniser avec les bots déployés depuis le dashboard
+        function syncWithDeployedBots() {
+            const deployedBots = JSON.parse(localStorage.getItem('deployed_bots') || '[]');
+            
+            deployedBots.forEach(deployedBot => {
+                // Vérifier si le bot existe déjà
+                const existingBotIndex = configuredBots.findIndex(b => 
+                    b.name === deployedBot.name && b.owner === deployedBot.owner
+                );
+                
+                if (existingBotIndex === -1) {
+                    // Ajouter un nouveau bot
+                    configuredBots.push({
+                        id: Date.now(),
+                        name: deployedBot.name,
+                        type: deployedBot.type || 'whatsapp',
+                        owner: deployedBot.owner || '243983205687',
+                        phone: deployedBot.phoneNumber || '+243000000000',
+                        status: deployedBot.status || 'online',
+                        online: deployedBot.online !== false,
+                        fakerecord: deployedBot.fakerecord || false,
+                        createdAt: deployedBot.deployedAt || new Date().toISOString(),
+                        config: deployedBot.config || {}
+                    });
+                }
+            });
+            
+            localStorage.setItem('hextech_configured_bots', JSON.stringify(configuredBots));
+        }
+
+        // Afficher une notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals en cliquant en dehors
+        window.addEventListener('click', function(event) {
+            const detailsModal = document.getElementById('botDetailsModal');
+            const deleteModal = document.getElementById('confirmDeleteModal');
+            const addBotModal = document.getElementById('addBotModal');
+            
+            if (event.target === detailsModal) {
+                detailsModal.style.display = 'none';
+            }
+            if (event.target === deleteModal) {
+                deleteModal.style.display = 'none';
+                botToDelete = null;
+            }
+            if (event.target === addBotModal) {
+                addBotModal.style.display = 'none';
+            }
+        });
+
+        // Initialiser la page au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'accès admin
+            checkAdminAccess();
+            
+            // Si l'utilisateur est admin, synchroniser les bots
+            const currentUser = JSON.parse(localStorage.getItem('hextech_current_user')) || { isAdmin: false };
+            if (currentUser.isAdmin) {
+                syncWithDeployedBots();
+                
+                // Mettre à jour automatiquement toutes les 30 secondes
+                setInterval(() => {
+                    syncWithDeployedBots();
+                    updateConfiguredBotsTable();
+                }, 30000);
+            }
+        });
+    </script>
+</body>
+</html>
